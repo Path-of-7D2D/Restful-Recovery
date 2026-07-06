@@ -52,11 +52,14 @@ namespace RestfulRecovery
 
             var blockRotation = blockValue.Block.shape.GetRotation(blockValue);
             var blockCenter = blockPos.ToVector3() + new Vector3(0.5f, 0f, 0.5f);
+            var seatRotation = blockRotation * Quaternion.Euler(0f, profile.YawOffsetDegrees, 0f);
 
             seatBlockPos = blockPos;
             seatBlockType = blockValue.type;
-            seatAnchor = blockCenter + blockRotation * profile.LocalOffset;
-            seatYawDegrees = blockRotation.eulerAngles.y + profile.YawOffsetDegrees;
+            seatAnchor = blockCenter
+                + Vector3.up * profile.Height
+                + seatRotation * Vector3.forward * profile.ForwardOffset;
+            seatYawDegrees = seatRotation.eulerAngles.y;
 
             isResting = true;
             restStartedTime = Time.time;
