@@ -9,10 +9,11 @@ namespace RestfulRecovery
     {
         public const string RestingBuffName = "buffRestfulRecoveryResting";
 
-        // Vanilla 4x4 front-passenger seated pose (vehicles.xml seat1): plain
-        // sitting with hands free, no steering IK. Networked through the
-        // player's vehicle pose stats.
-        private const int SeatedPoseId = 41;
+        // Vanilla 4x4 tailgate-passenger seated pose (vehicles.xml seat4):
+        // hands free with legs hanging at a bent-knee angle, unlike the
+        // front-passenger pose (41) whose legs stretch into the footwell.
+        // Networked through the player's vehicle pose stats.
+        private const int SeatedPoseId = 44;
 
         // The resting buff has a 4s duration in XML so it self-expires if rest
         // ends abnormally; refresh it well inside that window.
