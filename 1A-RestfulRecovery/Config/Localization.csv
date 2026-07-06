@@ -4,3 +4,4 @@ restfulRecoveryRestPrompt,UI,HUD,,,,Press {{0}} to Rest on {0}
 restfulRecoveryStandPrompt,UI,HUD,,,,Press {{0}} to Stand Up
 buffRestfulRecoveryMendingName,buffs,buff,,,,Mending
 buffRestfulRecoveryMendingDesc,buffs,buff,,,,"Resting is speeding up your recovery. Untreated sprains and breaks mend 4x faster while you stay seated."
+restfulRecoveryMendingToolbelt,buffs,buff,,,,"Your injuries are mending faster while you rest."

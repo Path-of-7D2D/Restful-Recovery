@@ -15,6 +15,12 @@
 		<buff name="buffRestfulRecoveryMending" name_key="buffRestfulRecoveryMendingName" description_key="buffRestfulRecoveryMendingDesc" icon="ui_game_symbol_brokenbone" icon_color="80,220,120">
 			<stack_type value="replace"/>
 			<duration value="3"/>
+			<effect_group>
+				<!-- onSelfBuffStart only fires on fresh application (the
+				     per-tick refreshes are stacks), so this shows once when
+				     the rest bonus kicks in, not every second. -->
+				<triggered_effect trigger="onSelfBuffStart" action="ShowToolbeltMessage" message_key="restfulRecoveryMendingToolbelt"/>
+			</effect_group>
 		</buff>
 	</append>
 
