@@ -204,6 +204,12 @@ namespace RestfulRecovery
             var offset = camera.Position3rdPersonOffset;
             offset.z = RestCameraDistance;
             camera.Position3rdPersonOffset = offset;
+
+            // With the vp Driving state active the third-person camera
+            // orbits DrivingPosition instead of the controller position.
+            // Vehicles feed it every frame; without one it goes stale and
+            // the camera drops to the ground, so keep it on the sitter.
+            camera.DrivingPosition = player.transform.position;
         }
 
         private static bool ShouldCancelFromWorld(EntityPlayerLocal player)

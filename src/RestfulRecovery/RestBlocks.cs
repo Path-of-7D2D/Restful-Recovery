@@ -20,20 +20,21 @@ namespace RestfulRecovery
 
     internal static class RestBlocks
     {
-        // The sitter faces the shape rotation's forward (+Z in block-local
-        // space), no extra yaw. The seated pose renders the hips roughly
-        // 0.4m above the entity origin, so anchoring at the block base puts
-        // the hips at seat-cushion height.
+        // Furniture models are authored facing local -Z, so the sitter needs
+        // 180 yaw on top of the shape rotation (verified in game once facing
+        // enforcement actually held). The seated pose renders the hips
+        // roughly 0.4m above the entity origin, so anchors sit slightly
+        // below the block base to land the hips on the cushion.
 
         // Chairs: seat at the block center.
         private static readonly SeatProfile ChairProfile =
-            new SeatProfile(new Vector3(0f, 0f, 0f), 0f);
+            new SeatProfile(new Vector3(0f, -0.1f, 0f), 180f);
 
         // Couches/sectionals: cushions sit a bit lower than chair seats, and
         // the seat is slightly toward the front edge of the cushion (local
-        // +Z is the direction the sitter faces).
+        // -Z is the direction the sitter faces).
         private static readonly SeatProfile CouchProfile =
-            new SeatProfile(new Vector3(0f, -0.05f, 0.15f), 0f);
+            new SeatProfile(new Vector3(0f, -0.15f, -0.15f), 180f);
 
         // Upright, usable seat families in V3.0. Broken, folded, and fallen
         // variants are filtered below; car seats, wheelchairs, theater seats,
