@@ -37,6 +37,7 @@ namespace RestfulRecovery
     {
         private const float ChairSeatHeight = 0.25f;
         private const float CouchSeatHeight = 0.5f;
+        private const float UglyArmchairSeatHeight = 0.2f;
         private const float StoolTopHeight = 0.67f;
         private const float ChairFallback = -0.1f;
         private const float CouchFallback = -0.15f;
@@ -76,6 +77,10 @@ namespace RestfulRecovery
             new SeatFamily("wheelchair", new SeatProfile(ChairSeatHeight, ChairFallback, 0f, 0f)),
             new SeatFamily("woodChair1", new SeatProfile(ChairSeatHeight, ChairFallback, 0f, 0f)),
             new SeatFamily("couchModern", new SeatProfile(CouchSeatHeight, CouchFallback, CouchForward, 0f)),
+            // Must precede the generic couchUgly prefix: the single-seat
+            // ugly armchair model needs a much lower seat point than the
+            // multi-seat ugly couches.
+            new SeatFamily("couchUglySingle", new SeatProfile(UglyArmchairSeatHeight, CouchFallback, CouchForward, 0f)),
             new SeatFamily("couchUgly", new SeatProfile(CouchSeatHeight, CouchFallback, CouchForward, 0f)),
             new SeatFamily("sectionalLeather", new SeatProfile(CouchSeatHeight, CouchFallback, CouchForward, 0f)),
             new SeatFamily("sectionalPlaid", new SeatProfile(CouchSeatHeight, CouchFallback, CouchForward, 0f))
