@@ -112,5 +112,14 @@ namespace RestfulRecovery
                 RestManager.UpdateResting(__instance);
             }
         }
+
+        [HarmonyPatch(typeof(EntityPlayerLocal), nameof(EntityPlayerLocal.FrameUpdateCamera))]
+        private static class FrameUpdateCameraPatch
+        {
+            private static void Postfix(EntityPlayerLocal __instance)
+            {
+                RestManager.UpdateRestCamera(__instance);
+            }
+        }
     }
 }

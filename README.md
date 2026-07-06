@@ -14,6 +14,10 @@ recover at 4x natural speed while you stay seated.
 - Untreated limb injuries (`buffLegSprained`, `buffLegBroken`,
   `buffArmSprained`, `buffArmBroken`) recover at 4x natural speed while
   resting.
+- A green Mending status icon appears next to the injury while the rest
+  bonus is actively speeding up recovery.
+- The camera pulls back for a comfortable view of your character while
+  seated.
 - Splinted and cast limbs are intentionally untouched: treating an injury is
   still the better option, resting is for when you have no supplies.
 - Rest cancels automatically when you move, jump, attack, take damage, die,

@@ -27,10 +27,14 @@ namespace RestfulRecovery
         private static int seatBlockType;
         private static Vector3 seatAnchor;
         private static float seatYawDegrees;
+        // Third-person camera distance while resting. Vanilla is 1.2m close
+        // up to 4.8m fully scrolled out; the vp camera's own collision
+        // handling pulls it back in when something is in the way.
+        private const float RestCameraDistance = 3f;
+
         private static int healthAtLastUpdate;
         private static float restStartedTime;
         private static float lastBuffRefreshTime;
-        private static float savedCameraDistanceMulti;
 
         public static bool IsResting => isResting;
 
@@ -59,11 +63,6 @@ namespace RestfulRecovery
             healthAtLastUpdate = player.Health;
 
             player.SetFirstPersonView(_bFirstPersonView: false, _bLerpPosition: true);
-
-            // Pull the third-person camera out to its max distance while
-            // seated; the pre-rest value comes back on stand up.
-            savedCameraDistanceMulti = player.cameraDistanceMulti;
-            player.cameraDistanceMulti = 1f;
 
             // Fully stop the local player controller, like MoveState.Off
             // does; leaving it enabled keeps the capsule colliding with the
@@ -102,7 +101,6 @@ namespace RestfulRecovery
 
             player.SetVehiclePoseMode(-1);
             player.Buffs.RemoveBuff(RestingBuffName);
-            player.cameraDistanceMulti = savedCameraDistanceMulti;
 
             player.m_characterController.Enable(true);
             var controller = player.vp_FPController;
@@ -147,6 +145,29 @@ namespace RestfulRecovery
                 player.Buffs.AddBuff(RestingBuffName);
                 lastBuffRefreshTime = Time.time;
             }
+        }
+
+        // Driven by the EntityPlayerLocal.FrameUpdateCamera postfix, which
+        // runs right after vanilla writes Position3rdPersonOffset each frame.
+        // Overriding the offset is required because vanilla skips the scroll
+        // zoom multiplier entirely whenever a ceiling is overhead, which is
+        // exactly where most chairs are.
+        public static void UpdateRestCamera(EntityPlayerLocal player)
+        {
+            if (!isResting || player == null || player.bFirstPersonView)
+            {
+                return;
+            }
+
+            var camera = player.vp_FPCamera;
+            if (camera == null)
+            {
+                return;
+            }
+
+            var offset = camera.Position3rdPersonOffset;
+            offset.z = RestCameraDistance;
+            camera.Position3rdPersonOffset = offset;
         }
 
         private static bool ShouldCancelFromWorld(EntityPlayerLocal player)
