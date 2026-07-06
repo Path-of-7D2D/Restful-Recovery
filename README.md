@@ -26,13 +26,15 @@ recover at 4x natural speed while you stay seated.
 ## Eligible furniture
 
 Chairs: bar stools, camping chairs, unfolded metal folding chairs, office
-chairs, school seats, old chairs, and wooden chairs.
+chairs, school seats, old chairs, wooden chairs, and wheelchairs.
 
 Couches: modern couches, ugly couches, and leather/plaid sectionals
 (including the matching single chairs).
 
-Broken, folded, and fallen chairs, car seats, wheelchairs, and beds are not
-restable.
+The seat height adapts to each piece of furniture by measuring the placed
+model, so the character sits on the cushion rather than at a fixed height.
+
+Broken, folded, and fallen chairs, car seats, and beds are not restable.
 
 ## Installation
 

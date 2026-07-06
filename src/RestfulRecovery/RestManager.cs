@@ -33,6 +33,10 @@ namespace RestfulRecovery
         // handling pulls it back in when something is in the way.
         private const float RestCameraDistance = 3f;
 
+        // How far above the entity origin the seated pose renders the hips;
+        // the anchor goes this far below the measured seat surface.
+        private const float HipHeightAboveOrigin = 0.52f;
+
         private static int healthAtLastUpdate;
         private static float restStartedTime;
         private static float lastBuffRefreshTime;
@@ -55,11 +59,23 @@ namespace RestfulRecovery
             var blockCenter = blockPos.ToVector3() + new Vector3(0.5f, 0f, 0.5f);
             var seatRotation = blockRotation * Quaternion.Euler(0f, profile.YawOffsetDegrees, 0f);
 
+            // Prefer the placed model's real rendered bounds for the seat
+            // height; models vary too much for one fixed offset per family.
+            float anchorY;
+            if (TryGetModelSeatHeight(world, blockPos, profile.SeatFraction, out var seatSurfaceY))
+            {
+                anchorY = seatSurfaceY - HipHeightAboveOrigin;
+            }
+            else
+            {
+                anchorY = blockPos.y + profile.FallbackHeight;
+            }
+
             seatBlockPos = blockPos;
             seatBlockType = blockValue.type;
             seatAnchor = blockCenter
-                + Vector3.up * profile.Height
                 + seatRotation * Vector3.forward * profile.ForwardOffset;
+            seatAnchor.y = anchorY;
             seatYawDegrees = seatRotation.eulerAngles.y;
 
             isResting = true;
@@ -162,6 +178,56 @@ namespace RestfulRecovery
                 player.Buffs.AddBuff(RestingBuffName);
                 lastBuffRefreshTime = Time.time;
             }
+        }
+
+        // Measures the placed furniture model's rendered bounds and returns
+        // the world Y of the seat surface at the given fraction of the model
+        // height. Renderer bounds are in Unity space, which is shifted by
+        // Origin relative to game world coordinates.
+        private static bool TryGetModelSeatHeight(WorldBase world, Vector3i blockPos, float seatFraction, out float seatSurfaceY)
+        {
+            seatSurfaceY = 0f;
+
+            var chunk = world.GetChunkFromWorldPos(blockPos) as Chunk;
+            var entityData = chunk?.GetBlockEntity(blockPos);
+            if (entityData == null || !entityData.bHasTransform)
+            {
+                return false;
+            }
+
+            var renderers = entityData.GetRenderers();
+            if (renderers == null)
+            {
+                return false;
+            }
+
+            var hasBounds = false;
+            var bounds = default(Bounds);
+            foreach (var renderer in renderers)
+            {
+                if (renderer == null)
+                {
+                    continue;
+                }
+
+                if (hasBounds)
+                {
+                    bounds.Encapsulate(renderer.bounds);
+                }
+                else
+                {
+                    bounds = renderer.bounds;
+                    hasBounds = true;
+                }
+            }
+
+            if (!hasBounds || bounds.size.y <= 0f)
+            {
+                return false;
+            }
+
+            seatSurfaceY = bounds.min.y + seatFraction * bounds.size.y + Origin.position.y;
+            return true;
         }
 
         // Faces the seated body toward the furniture's forward. SetRotation
