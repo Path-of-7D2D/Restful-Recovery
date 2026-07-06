@@ -76,7 +76,12 @@ namespace RestfulRecovery
             player.m_characterController.Enable(false);
             player.motion = Vector3.zero;
             player.SetPosition(seatAnchor);
+
+            // Snaps the camera once so the player starts out looking the way
+            // they are seated; after this the camera orbits freely.
             player.SetRotationAndStopTurning(new Vector3(0f, seatYawDegrees, 0f));
+            ApplySeatFacing(player);
+
             player.SetVehiclePoseMode(SeatedPoseId);
 
             player.Buffs.AddBuff(RestingBuffName);
@@ -139,11 +144,35 @@ namespace RestfulRecovery
             // Hold the seat: physics is disabled, so just pin the position.
             player.motion = Vector3.zero;
             player.SetPosition(seatAnchor, _bUpdatePhysics: false);
+            ApplySeatFacing(player);
 
             if (Time.time - lastBuffRefreshTime >= BuffRefreshIntervalSeconds)
             {
                 player.Buffs.AddBuff(RestingBuffName);
                 lastBuffRefreshTime = Time.time;
+            }
+        }
+
+        // Faces the seated body toward the furniture's forward. SetRotation
+        // is not enough for the local player: updateTransform re-reads yaw
+        // from PhysicsTransform every frame, and nothing syncs the graphics
+        // root's rotation while the vp controller owns the player, so both
+        // transforms are written directly. SetRotation itself is avoided here
+        // because its override snaps the camera, which should stay free to
+        // orbit while resting.
+        private static void ApplySeatFacing(EntityPlayerLocal player)
+        {
+            var euler = new Vector3(0f, seatYawDegrees, 0f);
+            player.rotation = euler;
+            player.qrotation = Quaternion.Euler(euler);
+            player.transform.rotation = player.qrotation;
+
+            var physicsTransform = player.PhysicsTransform;
+            if (physicsTransform != null)
+            {
+                var physicsEuler = physicsTransform.eulerAngles;
+                physicsEuler.y = seatYawDegrees;
+                physicsTransform.eulerAngles = physicsEuler;
             }
         }
 
