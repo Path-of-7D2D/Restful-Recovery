@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<xml>
+	<Name value="RestfulRecovery" />
+	<DisplayName value="Restful Recovery" />
+	<Description value="Rest on chairs and couches to visibly sit down and recover untreated sprains and breaks 4x faster." />
+	<Author value="Path-of-7D2D" />
+	<Version value="0.1.0" />
+	<Website value="https://github.com/Path-of-7D2D/Restful-Recovery" />
+	<!-- Uses Harmony to add a Rest action to chair and couch blocks, so it cannot
+	     load with EasyAntiCheat enabled. -->
+	<SkipWithAntiCheat value="true" />
+</xml>
