@@ -1,0 +1,4 @@
+Key,File,Type,UsedInMainMenu,NoTranslate,KeepLoaded,english
+restfulRecoveryRest,UI,HUD,,,,Rest
+restfulRecoveryRestPrompt,UI,HUD,,,,Press {{0}} to Rest on {0}
+restfulRecoveryStandPrompt,UI,HUD,,,,Press {{0}} to Stand Up

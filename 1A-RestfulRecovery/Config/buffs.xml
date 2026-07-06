@@ -1,0 +1,54 @@
+<configs>
+
+	<!-- Hidden marker buff applied by RestfulRecovery.dll while the player is
+	     seated on a chair or couch. Short duration + periodic refresh from the
+	     DLL means a stale buff (crash, relog mid-rest) expires on its own. -->
+	<append xpath="/buffs">
+		<buff name="buffRestfulRecoveryResting" hidden="true">
+			<stack_type value="replace"/>
+			<duration value="4"/>
+		</buff>
+	</append>
+
+	<!-- Untreated limb injuries drain their recovery counter by
+	     @$critHitNaturalHealingRate once per update tick. Three extra drains
+	     while resting = 4x total recovery speed. Splinted and cast limbs are
+	     separate buffs and are intentionally not patched. -->
+
+	<append xpath="/buffs/buff[@name='buffLegSprained']">
+		<effect_group name="RestfulRecovery rest bonus">
+			<requirement name="HasBuff" buff="buffRestfulRecoveryResting"/>
+			<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="$legHurtCounter" operation="subtract" value="@$critHitNaturalHealingRate"/>
+			<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="$legHurtCounter" operation="subtract" value="@$critHitNaturalHealingRate"/>
+			<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="$legHurtCounter" operation="subtract" value="@$critHitNaturalHealingRate"/>
+		</effect_group>
+	</append>
+
+	<append xpath="/buffs/buff[@name='buffLegBroken']">
+		<effect_group name="RestfulRecovery rest bonus">
+			<requirement name="HasBuff" buff="buffRestfulRecoveryResting"/>
+			<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="$legHurtCounter" operation="subtract" value="@$critHitNaturalHealingRate"/>
+			<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="$legHurtCounter" operation="subtract" value="@$critHitNaturalHealingRate"/>
+			<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="$legHurtCounter" operation="subtract" value="@$critHitNaturalHealingRate"/>
+		</effect_group>
+	</append>
+
+	<append xpath="/buffs/buff[@name='buffArmSprained']">
+		<effect_group name="RestfulRecovery rest bonus">
+			<requirement name="HasBuff" buff="buffRestfulRecoveryResting"/>
+			<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="$armHurtCounter" operation="subtract" value="@$critHitNaturalHealingRate"/>
+			<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="$armHurtCounter" operation="subtract" value="@$critHitNaturalHealingRate"/>
+			<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="$armHurtCounter" operation="subtract" value="@$critHitNaturalHealingRate"/>
+		</effect_group>
+	</append>
+
+	<append xpath="/buffs/buff[@name='buffArmBroken']">
+		<effect_group name="RestfulRecovery rest bonus">
+			<requirement name="HasBuff" buff="buffRestfulRecoveryResting"/>
+			<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="$armHurtCounter" operation="subtract" value="@$critHitNaturalHealingRate"/>
+			<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="$armHurtCounter" operation="subtract" value="@$critHitNaturalHealingRate"/>
+			<triggered_effect trigger="onSelfBuffUpdate" action="ModifyCVar" cvar="$armHurtCounter" operation="subtract" value="@$critHitNaturalHealingRate"/>
+		</effect_group>
+	</append>
+
+</configs>
