@@ -72,6 +72,12 @@ namespace RestfulRecovery
             {
                 controller.Stop();
                 controller.enabled = false;
+
+                // The vp Driving state is what vehicles use while seated; it
+                // stops vp_FPCamera from re-writing the player root's yaw
+                // from the camera every frame, which would fight the seat
+                // facing and jitter the model.
+                controller.Player.Driving.Start();
             }
             player.m_characterController.Enable(false);
             player.motion = Vector3.zero;
@@ -111,6 +117,7 @@ namespace RestfulRecovery
             var controller = player.vp_FPController;
             if (controller != null)
             {
+                controller.Player.Driving.Stop();
                 controller.enabled = true;
                 controller.Stop();
             }
