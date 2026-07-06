@@ -20,14 +20,19 @@ namespace RestfulRecovery
 
     internal static class RestBlocks
     {
-        // Chairs: seat near the block center, face the block's forward.
-        private static readonly SeatProfile ChairProfile =
-            new SeatProfile(new Vector3(0f, 0.3f, 0f), 0f);
+        // Furniture models face opposite their shape rotation's forward, so
+        // both profiles add 180 yaw to sit facing away from the backrest.
+        // Y offsets approximate the seat cushion surface; the seated pose
+        // keeps the hips near the entity origin.
 
-        // Couches/sectionals: seat slightly forward from center and face
-        // outward from the cushion backrest.
+        // Chairs: seat at the block center.
+        private static readonly SeatProfile ChairProfile =
+            new SeatProfile(new Vector3(0f, 0.42f, 0f), 180f);
+
+        // Couches/sectionals: seat slightly toward the front edge of the
+        // cushion (local -Z is the direction the sitter faces).
         private static readonly SeatProfile CouchProfile =
-            new SeatProfile(new Vector3(0f, 0.3f, 0.15f), 180f);
+            new SeatProfile(new Vector3(0f, 0.38f, -0.15f), 180f);
 
         // Upright, usable seat families in V3.0. Broken, folded, and fallen
         // variants are filtered below; car seats, wheelchairs, theater seats,

@@ -9,9 +9,10 @@ namespace RestfulRecovery
     {
         public const string RestingBuffName = "buffRestfulRecoveryResting";
 
-        // Vanilla bicycle seated pose; networked through the player's vehicle
-        // pose stats. If it reads too bike-specific in testing, try 20/30/40.
-        private const int SeatedPoseId = 1;
+        // Vanilla 4x4 front-passenger seated pose (vehicles.xml seat1): plain
+        // sitting with hands free, no steering IK. Networked through the
+        // player's vehicle pose stats.
+        private const int SeatedPoseId = 41;
 
         // The resting buff has a 4s duration in XML so it self-expires if rest
         // ends abnormally; refresh it well inside that window.
@@ -29,6 +30,7 @@ namespace RestfulRecovery
         private static int healthAtLastUpdate;
         private static float restStartedTime;
         private static float lastBuffRefreshTime;
+        private static float savedCameraDistanceMulti;
 
         public static bool IsResting => isResting;
 
@@ -57,6 +59,21 @@ namespace RestfulRecovery
             healthAtLastUpdate = player.Health;
 
             player.SetFirstPersonView(_bFirstPersonView: false, _bLerpPosition: true);
+
+            // Pull the third-person camera out to its max distance while
+            // seated; the pre-rest value comes back on stand up.
+            savedCameraDistanceMulti = player.cameraDistanceMulti;
+            player.cameraDistanceMulti = 1f;
+
+            // Fully stop the local player controller, like MoveState.Off
+            // does; leaving it enabled keeps the capsule colliding with the
+            // furniture and pushes the player on top of it.
+            var controller = player.vp_FPController;
+            if (controller != null)
+            {
+                controller.Stop();
+                controller.enabled = false;
+            }
             player.m_characterController.Enable(false);
             player.motion = Vector3.zero;
             player.SetPosition(seatAnchor);
@@ -85,7 +102,15 @@ namespace RestfulRecovery
 
             player.SetVehiclePoseMode(-1);
             player.Buffs.RemoveBuff(RestingBuffName);
+            player.cameraDistanceMulti = savedCameraDistanceMulti;
+
             player.m_characterController.Enable(true);
+            var controller = player.vp_FPController;
+            if (controller != null)
+            {
+                controller.enabled = true;
+                controller.Stop();
+            }
 
             // bPreferFirstPerson was untouched while we forced third person,
             // so this restores whatever the player used before resting.
