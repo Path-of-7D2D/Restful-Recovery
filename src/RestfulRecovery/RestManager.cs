@@ -35,7 +35,7 @@ namespace RestfulRecovery
 
         // How far above the entity origin the seated pose renders the hips;
         // the anchor goes this far below the measured seat surface.
-        private const float HipHeightAboveOrigin = 0.52f;
+        private const float HipHeightAboveOrigin = 0.62f;
 
         private static int healthAtLastUpdate;
         private static float restStartedTime;
@@ -60,22 +60,22 @@ namespace RestfulRecovery
             var seatRotation = blockRotation * Quaternion.Euler(0f, profile.YawOffsetDegrees, 0f);
 
             // Prefer the placed model's real rendered bounds for the seat
-            // height; models vary too much for one fixed offset per family.
-            float anchorY;
-            if (TryGetModelSeatHeight(world, blockPos, profile.SeatFraction, out var seatSurfaceY))
+            // position; models vary too much within a family for fixed
+            // offsets, and many sit visually off-center in their block.
+            Vector3 anchorBase;
+            if (TryGetModelSeatPoint(world, blockPos, profile.SeatFraction, out var seatSurface))
             {
-                anchorY = seatSurfaceY - HipHeightAboveOrigin;
+                anchorBase = seatSurface + Vector3.down * HipHeightAboveOrigin;
             }
             else
             {
-                anchorY = blockPos.y + profile.FallbackHeight;
+                anchorBase = blockCenter + Vector3.up * profile.FallbackHeight;
             }
 
             seatBlockPos = blockPos;
             seatBlockType = blockValue.type;
-            seatAnchor = blockCenter
+            seatAnchor = anchorBase
                 + seatRotation * Vector3.forward * profile.ForwardOffset;
-            seatAnchor.y = anchorY;
             seatYawDegrees = seatRotation.eulerAngles.y;
 
             isResting = true;
@@ -181,12 +181,13 @@ namespace RestfulRecovery
         }
 
         // Measures the placed furniture model's rendered bounds and returns
-        // the world Y of the seat surface at the given fraction of the model
-        // height. Renderer bounds are in Unity space, which is shifted by
-        // Origin relative to game world coordinates.
-        private static bool TryGetModelSeatHeight(WorldBase world, Vector3i blockPos, float seatFraction, out float seatSurfaceY)
+        // the world-space seat point: the bounds' horizontal center at the
+        // given fraction of the model height. Renderer bounds are in Unity
+        // space, which is shifted by Origin relative to game world
+        // coordinates.
+        private static bool TryGetModelSeatPoint(WorldBase world, Vector3i blockPos, float seatFraction, out Vector3 seatSurface)
         {
-            seatSurfaceY = 0f;
+            seatSurface = Vector3.zero;
 
             var chunk = world.GetChunkFromWorldPos(blockPos) as Chunk;
             var entityData = chunk?.GetBlockEntity(blockPos);
@@ -226,7 +227,10 @@ namespace RestfulRecovery
                 return false;
             }
 
-            seatSurfaceY = bounds.min.y + seatFraction * bounds.size.y + Origin.position.y;
+            seatSurface = new Vector3(
+                bounds.center.x,
+                bounds.min.y + seatFraction * bounds.size.y,
+                bounds.center.z) + Origin.position;
             return true;
         }
 

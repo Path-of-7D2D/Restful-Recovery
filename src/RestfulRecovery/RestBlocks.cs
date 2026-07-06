@@ -36,7 +36,7 @@ namespace RestfulRecovery
     internal static class RestBlocks
     {
         private const float SeatMidHeight = 0.5f;
-        private const float StoolTopHeight = 0.85f;
+        private const float StoolTopHeight = 0.72f;
         private const float ChairFallback = -0.1f;
         private const float CouchFallback = -0.15f;
         private const float CouchForward = 0.15f;
