@@ -35,8 +35,9 @@ namespace RestfulRecovery
 
     internal static class RestBlocks
     {
-        private const float SeatMidHeight = 0.5f;
-        private const float StoolTopHeight = 0.72f;
+        private const float ChairSeatHeight = 0.4f;
+        private const float CouchSeatHeight = 0.5f;
+        private const float StoolTopHeight = 0.67f;
         private const float ChairFallback = -0.1f;
         private const float CouchFallback = -0.15f;
         private const float CouchForward = 0.15f;
@@ -65,19 +66,19 @@ namespace RestfulRecovery
         private static readonly SeatFamily[] Families =
         {
             new SeatFamily("barStool", new SeatProfile(StoolTopHeight, ChairFallback, 0f, 0f)),
-            new SeatFamily("chairCamping", new SeatProfile(SeatMidHeight, ChairFallback, 0f, 0f)),
-            new SeatFamily("chairFoldingMetalUnfolded", new SeatProfile(SeatMidHeight, ChairFallback, 0f, 180f)),
-            new SeatFamily("chairWood01", new SeatProfile(SeatMidHeight, ChairFallback, 0f, 180f)),
-            new SeatFamily("officeChair01", new SeatProfile(SeatMidHeight, ChairFallback, 0f, 0f)),
-            new SeatFamily("oldChair1", new SeatProfile(SeatMidHeight, ChairFallback, 0f, 180f)),
-            new SeatFamily("schoolSeat01", new SeatProfile(SeatMidHeight, ChairFallback, 0f, 180f)),
-            new SeatFamily("schoolSeat02", new SeatProfile(SeatMidHeight, ChairFallback, 0f, 180f)),
-            new SeatFamily("wheelchair", new SeatProfile(SeatMidHeight, ChairFallback, 0f, 0f)),
-            new SeatFamily("woodChair1", new SeatProfile(SeatMidHeight, ChairFallback, 0f, 0f)),
-            new SeatFamily("couchModern", new SeatProfile(SeatMidHeight, CouchFallback, CouchForward, 0f)),
-            new SeatFamily("couchUgly", new SeatProfile(SeatMidHeight, CouchFallback, CouchForward, 0f)),
-            new SeatFamily("sectionalLeather", new SeatProfile(SeatMidHeight, CouchFallback, CouchForward, 0f)),
-            new SeatFamily("sectionalPlaid", new SeatProfile(SeatMidHeight, CouchFallback, CouchForward, 0f))
+            new SeatFamily("chairCamping", new SeatProfile(ChairSeatHeight, ChairFallback, 0f, 0f)),
+            new SeatFamily("chairFoldingMetalUnfolded", new SeatProfile(ChairSeatHeight, ChairFallback, 0f, 180f)),
+            new SeatFamily("chairWood01", new SeatProfile(ChairSeatHeight, ChairFallback, 0f, 180f)),
+            new SeatFamily("officeChair01", new SeatProfile(ChairSeatHeight, ChairFallback, 0f, 0f)),
+            new SeatFamily("oldChair1", new SeatProfile(ChairSeatHeight, ChairFallback, 0f, 180f)),
+            new SeatFamily("schoolSeat01", new SeatProfile(ChairSeatHeight, ChairFallback, 0f, 180f)),
+            new SeatFamily("schoolSeat02", new SeatProfile(ChairSeatHeight, ChairFallback, 0f, 180f)),
+            new SeatFamily("wheelchair", new SeatProfile(ChairSeatHeight, ChairFallback, 0f, 0f)),
+            new SeatFamily("woodChair1", new SeatProfile(ChairSeatHeight, ChairFallback, 0f, 0f)),
+            new SeatFamily("couchModern", new SeatProfile(CouchSeatHeight, CouchFallback, CouchForward, 0f)),
+            new SeatFamily("couchUgly", new SeatProfile(CouchSeatHeight, CouchFallback, CouchForward, 0f)),
+            new SeatFamily("sectionalLeather", new SeatProfile(CouchSeatHeight, CouchFallback, CouchForward, 0f)),
+            new SeatFamily("sectionalPlaid", new SeatProfile(CouchSeatHeight, CouchFallback, CouchForward, 0f))
         };
 
         private static readonly string[] ExcludedFragments =
